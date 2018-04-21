@@ -74,13 +74,19 @@ public class MappingServiceImpl implements MappingService, InitializingBean {
         mysqlTypeElasticsearchTypeMapping.put("text", data -> data);
         mysqlTypeElasticsearchTypeMapping.put("blob", data -> data);
         mysqlTypeElasticsearchTypeMapping.put("int", Long::valueOf);
-        mysqlTypeElasticsearchTypeMapping.put("date", data -> LocalDateTime.parse(data, formatter).format(formatter));
-        mysqlTypeElasticsearchTypeMapping.put("time", data -> LocalDateTime.parse(data, formatter).format(formatter));
+        mysqlTypeElasticsearchTypeMapping.put("date", data -> LocalDateTime.parse(timeSecondAddOne(data), formatter));
+        mysqlTypeElasticsearchTypeMapping.put("time", data -> LocalDateTime.parse(timeSecondAddOne(data), formatter));
         mysqlTypeElasticsearchTypeMapping.put("float", Double::valueOf);
         mysqlTypeElasticsearchTypeMapping.put("double", Double::valueOf);
         mysqlTypeElasticsearchTypeMapping.put("decimal", Double::valueOf);
     }
 
+    private String timeSecondAddOne(String date){
+        if("00".equals(date.substring(date.length()-2))){
+            return date.substring(0,date.length()-2)+"01";
+        }
+        return date;
+    }
     public Map<String, String> getDbEsMapping() {
         return dbEsMapping;
     }
